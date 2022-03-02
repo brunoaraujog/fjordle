@@ -56,17 +56,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const isCorrectLetter = pamonha[selectedWordIndex].includes(letter)
 
         if (!isCorrectLetter) {
-            return "rgb(58, 58, 60)";
+            return "rgba(29, 53, 62, 1)";
         }
 
         const letterInThatPosition = pamonha[selectedWordIndex].charAt(index)
         const isCorrectPosition = letter === letterInThatPosition
 
         if (isCorrectPosition) {
-            return "rgb(83, 141, 78)";
+            return "rgba(233, 58, 101, 1)";
         }
 
-        return "rgb(181, 159, 59)";
+        return "rgba(218, 166, 9, 1)";
     }
 
     function handleSubmitWord() {
