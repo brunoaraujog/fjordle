@@ -56,11 +56,9 @@ for (let i = 0; i < keys.length; i++) {
 
 // incorporating peter's suggestions
 // Add event listener on keydown for keyboard entry
-document.addEventListener('keyup', (event) => {
+document.addEventListener('keydown', (event) => {
 	var code = event.code;
-	var letter = event.key;
-	// console.log(event.code);
-	// console.log(event.key);
+	var key = event.key;
 	if (code == "Enter") {
 		handleSubmitWord()
 		return;
@@ -71,12 +69,30 @@ document.addEventListener('keyup', (event) => {
 		return;
 	}
 
-	if (letter >= 'a' && letter <= 'z'
-		|| letter >= 'A' && letter <= 'Z') {
-		// console.log("é uma letra válida");
-		updateGuessedWords(letter);
+	if (isLetter(key)) {
+		updateGuessedWords(key);
 	}
 }, false);
+
+function isLetter(key) {
+	if (key == 'a' || key == 'b' || key == 'c' || key == 'd' || key == 'e'
+	|| key == 'f' || key == 'g' || key == 'h' || key == 'i' || key == 'j'
+	|| key == 'k' || key == 'l' || key == 'm' || key == 'n' || key == 'o'
+	|| key == 'p' || key == 'q' || key == 'r' || key == 's' || key == 't'
+	|| key == 'u' || key == 'v' || key == 'w' || key == 'x' || key == 'y'
+	|| key == 'z'
+	|| key == 'A' || key == 'B' || key == 'C' || key == 'D' || key == 'E'
+	|| key == 'F' || key == 'G' || key == 'H' || key == 'I' || key == 'J'
+	|| key == 'K' || key == 'L' || key == 'M' || key == 'N' || key == 'O'
+	|| key == 'P' || key == 'Q' || key == 'R' || key == 'S' || key == 'T'
+	|| key == 'U' || key == 'V' || key == 'W' || key == 'X' || key == 'Y'
+	|| key == 'Z') {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
 function handleSubmitWord() {
 	const currentWordArr = getCurrentWordArr()
