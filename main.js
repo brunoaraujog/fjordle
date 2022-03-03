@@ -103,35 +103,48 @@ function handleSubmitWord() {
 
 	const currentWord = currentWordArr.join('')
 
-	const firstLetterId = guessedWordCount * 5 + 1;
-	const interval = 200;
-	currentWordArr.forEach((letter, index) => {
-		setTimeout(() => {
-			const tileColor = getTileColor(letter, index, wordOfTheDay);
-
-			const letterId = firstLetterId + index;
-			const letterEl = document.getElementById(letterId)
-			letterEl.classList.add("animate__flipInX");
-			letterEl.style = `background-color:${tileColor};border-color:${tileColor}`;
-		}, interval * index);
+	fetch(
+		`https://api.dictionaryapi.dev/api/v2/entries/en/${currentWord}`,
+		{
+			method: "GET"
+		}
+	).then((res) => {
+		if (!res.ok) {
+			throw Error()
+		}
+		const firstLetterId = guessedWordCount * 5 + 1;
+		const interval = 200;
+		currentWordArr.forEach((letter, index) => {
+			setTimeout(() => {
+				const tileColor = getTileColor(letter, index, wordOfTheDay);
+	
+				const letterId = firstLetterId + index;
+				const letterEl = document.getElementById(letterId)
+				letterEl.classList.add("animate__flipInX");
+				letterEl.style = `background-color:${tileColor};border-color:${tileColor}`;
+			}, interval * index);
+		})
+	
+		guessedWordCount += 1;
+	
+		if ((currentWord === allWords[0] && (today_day >= 1 && today_day <= 10))
+		|| (currentWord === allWords[1] && (today_day >= (13 - 2) && today_day <= (16 + 1)))
+		|| (currentWord === allWords[2] && (today_day >= 18 && today_day <= 24))
+		|| (currentWord === allWords[3] && (today_day >= 25 && today_day <= 31))) {
+			setTimeout(() => {
+				window.alert("Congratulations!");
+			}, interval * 6);
+		} 
+	
+		if (guessedWords.length > 5) {
+			window.alert(`Sorry, you have no more guesses. The word is ${wordOfTheDay}.`)
+		}
+	
+		guessedWords.push([]);
+	}).catch(() => {
+		window.alert("Word is not recognised");
 	})
 
-	guessedWordCount += 1;
-
-	if ((currentWord === allWords[0] && (today_day >= 1 && today_day <= 10))
-	|| (currentWord === allWords[1] && (today_day >= (13 - 2) && today_day <= (16 + 1)))
-	|| (currentWord === allWords[2] && (today_day >= 18 && today_day <= 24))
-	|| (currentWord === allWords[3] && (today_day >= 25 && today_day <= 31))) {
-		setTimeout(() => {
-			window.alert("Congratulations!");
-		}, interval * 6);
-	} 
-
-	if (guessedWords.length > 5) {
-		window.alert(`Sorry, you have no more guesses. The word is ${wordOfTheDay}.`)
-	}
-
-	guessedWords.push([]);
 }
 
 function handleDeleteLetter() {
