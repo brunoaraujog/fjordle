@@ -4,28 +4,28 @@ let guessedWords = [[]];
 let availableSpace = 1;
 
 //let word = "fjord";
-const pamonha = ["brisk", "zesty", "fiery", "fjord"];
+const allWords = ["brisk", "zesty", "fiery", "fjord"];
 
 let today;
 today = new Date();
 let today_day = today.getDay();
-let selectedWordIndex;
+let wordOfTheDay;
 
 if (today_day >= 1 && today_day <= 10) {
 
-	selectedWordIndex = 0;
+	wordOfTheDay = allWords[0];
 
 } else if (today_day >= (13 - 2) && today_day <= (16 + 1)) {
 
-	selectedWordIndex = 1;
+	wordOfTheDay = allWords[1];
 
 } else if (today_day >= 18 && today_day <= 24) {
 
-	selectedWordIndex = 2;
+	wordOfTheDay = allWords[2];
 
 } else if (today_day >= 25 && today_day <= 31) {
 
-	selectedWordIndex = 3;
+	wordOfTheDay = allWords[3];
 }
 
 let guessedWordCount = 0;
@@ -91,7 +91,7 @@ function handleSubmitWord() {
 	const interval = 200;
 	currentWordArr.forEach((letter, index) => {
 		setTimeout(() => {
-			const tileColor = getTileColor(letter, index, selectedWordIndex);
+			const tileColor = getTileColor(letter, index, wordOfTheDay);
 
 			const letterId = firstLetterId + index;
 			const letterEl = document.getElementById(letterId)
@@ -102,26 +102,26 @@ function handleSubmitWord() {
 
 	guessedWordCount += 1;
 
-	if (currentWord === pamonha[0] && (today_day >= 1 && today_day <= 10)) {
+	if (currentWord === allWords[0] && (today_day >= 1 && today_day <= 10)) {
 
 		window.alert("Congratulations!");
 
-	} else if (currentWord === pamonha[1] && (today_day >= (13 - 2) && today_day <= (16 + 1))) {
+	} else if (currentWord === allWords[1] && (today_day >= (13 - 2) && today_day <= (16 + 1))) {
 
 		window.alert("Congratulations!");
 
-	} else if (currentWord === pamonha[2] && (today_day >= 18 && today_day <= 24)) {
+	} else if (currentWord === allWords[2] && (today_day >= 18 && today_day <= 24)) {
 
 		window.alert("Congratulations!");
 
-	} else if (currentWord === pamonha[3] && (today_day >= 25 && today_day <= 31)) {
+	} else if (currentWord === allWords[3] && (today_day >= 25 && today_day <= 31)) {
 
 		window.alert("Congratulations!");
 
 	}
 
-	if (guessedWords.length === 6) {
-		window.alert("Sorry, you have no more guesses. /** The word is ${word}. **/")
+	if (guessedWords.length > 5) {
+		window.alert(`Sorry, you have no more guesses. The word is ${wordOfTheDay}.`)
 	}
 
 	guessedWords.push([]);
@@ -157,14 +157,14 @@ function updateGuessedWords(letter) {
 	}
 }
 
-function getTileColor(letter, index, selectedWordIndex) {
-	const isCorrectLetter = pamonha[selectedWordIndex].includes(letter)
+function getTileColor(letter, index, word) {
+	const isCorrectLetter = word.includes(letter)
 
 	if (!isCorrectLetter) {
 		return "rgba(29, 53, 62, 1)";
 	}
 
-	const letterInThatPosition = pamonha[selectedWordIndex].charAt(index)
+	const letterInThatPosition = word.charAt(index)
 	const isCorrectPosition = letter === letterInThatPosition
 
 	if (isCorrectPosition) {
