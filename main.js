@@ -77,23 +77,7 @@ document.addEventListener('keydown', (event) => {
 }, false);
 
 function isLetter(key) {
-	if (key == 'a' || key == 'b' || key == 'c' || key == 'd' || key == 'e'
-	|| key == 'f' || key == 'g' || key == 'h' || key == 'i' || key == 'j'
-	|| key == 'k' || key == 'l' || key == 'm' || key == 'n' || key == 'o'
-	|| key == 'p' || key == 'q' || key == 'r' || key == 's' || key == 't'
-	|| key == 'u' || key == 'v' || key == 'w' || key == 'x' || key == 'y'
-	|| key == 'z'
-	|| key == 'A' || key == 'B' || key == 'C' || key == 'D' || key == 'E'
-	|| key == 'F' || key == 'G' || key == 'H' || key == 'I' || key == 'J'
-	|| key == 'K' || key == 'L' || key == 'M' || key == 'N' || key == 'O'
-	|| key == 'P' || key == 'Q' || key == 'R' || key == 'S' || key == 'T'
-	|| key == 'U' || key == 'V' || key == 'W' || key == 'X' || key == 'Y'
-	|| key == 'Z') {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return /^[a-z]$/i.test(key);
 }
 
 function handleSubmitWord() {
