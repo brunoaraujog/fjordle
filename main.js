@@ -161,17 +161,18 @@ function getTileColor(letter, index, selectedWordIndex) {
 	const isCorrectLetter = pamonha[selectedWordIndex].includes(letter)
 
 	if (!isCorrectLetter) {
-		return "rgba(29, 53, 62, 1)";
+		return "rgba(171, 192, 196, 1)";
 	}
 
 	const letterInThatPosition = pamonha[selectedWordIndex].charAt(index)
 	const isCorrectPosition = letter === letterInThatPosition
 
 	if (isCorrectPosition) {
-		return "rgba(233, 58, 101, 1)";
+		return "rgba(62, 163, 101, 1)";
 	}
 
-	return "rgba(218, 166, 9, 1)";
+	return "rgba(196, 155, 32, 1)";
+	
 }
 
 function createSquares() {

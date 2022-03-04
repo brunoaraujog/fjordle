@@ -107,3 +107,18 @@ html, body {
 .spacer-half {
     flex-grow: 0.5;
 }
+/* 
+.keyboard-row button.incorrect-letter {
+    background-color: rgba(29, 53, 62, 1);
+    color: white;
+}
+
+.keyboard-row button.correct-letter-correct-position {
+    background-color: rgba(233, 58, 101, 1);
+    color: white;
+}
+
+.keyboard-row button.correct-letter-wrong-position {
+    background-color: rgba(218, 166, 9, 1);
+    color: white;
+} */
