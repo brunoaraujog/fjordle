@@ -58,15 +58,15 @@ for (let i = 0; i < keys.length; i++) {
 
 // incorporating peter's suggestions
 // Add event listener on keydown for keyboard entry
-document.addEventListener('keydown', (event) => {
-	var code = event.code;
-	var key = event.key;
-	if (code == "Enter") {
+document.addEventListener('keydown', handleKeyDown);
+
+function handleKeyDown({ code, key }) {
+	if (code === "Enter") {
 		handleSubmitWord()
 		return;
 	}
 
-	if (code == "Backspace" || code == "Delete") {
+	if (code === "Backspace" || code === "Delete") {
 		handleDeleteLetter()
 		return;
 	}
@@ -74,7 +74,7 @@ document.addEventListener('keydown', (event) => {
 	if (isLetter(key)) {
 		updateGuessedWords(key);
 	}
-}, false);
+}
 
 function isLetter(key) {
 	return /^[a-z]$/i.test(key);
@@ -226,4 +226,6 @@ function clearBoard() {
 	for (const key of keys) {
 		key.disabled = true;
 	}
-  }
+
+	document.removeEventListener('keydown', handleKeyDown);
+}
