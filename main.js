@@ -131,11 +131,13 @@ function handleSubmitWord() {
 		if (guessIsCorrect(currentWord)) {
 			setTimeout(() => {
 				window.alert("Congratulations!");
+				clearBoard();
 			}, interval * 6);
 		} 
 		else if (guessedWords.length > 5) {
 			setTimeout(() => {
 				window.alert(`Sorry, you have no more guesses. The word is ${wordOfTheDay}.`)
+				clearBoard();
 			}, interval * 6);
 		}
 	
@@ -214,3 +216,16 @@ function guessIsCorrect(currentWord) {
 	else
 		return false;
 }
+
+function clearBoard() {
+    for (let i = 0; i < 30; i++) {
+      let square = document.getElementById(i + 1);
+      square.textContent = "";
+    }
+
+    const keys = document.getElementsByClassName("keyboard-button");
+
+    for (var key of keys) {
+      key.disabled = true;
+    }
+  }
