@@ -4,28 +4,28 @@ let guessedWords = [[]];
 let availableSpace = 1;
 
 //let word = "fjord";
-const pamonha = ["brisk", "zesty", "fiery", "fjord"];
+const allWords = ["brisk", "zesty", "fiery", "fjord"];
 
 let today;
 today = new Date();
 let today_day = today.getDay();
-let selectedWordIndex;
+let wordOfTheDay;
 
 if (today_day >= 1 && today_day <= 10) {
 
-	selectedWordIndex = 0;
+	wordOfTheDay = allWords[0];
 
 } else if (today_day >= (13 - 2) && today_day <= (16 + 1)) {
 
-	selectedWordIndex = 1;
+	wordOfTheDay = allWords[1];
 
 } else if (today_day >= 18 && today_day <= 24) {
 
-	selectedWordIndex = 2;
+	wordOfTheDay = allWords[2];
 
 } else if (today_day >= 25 && today_day <= 31) {
 
-	selectedWordIndex = 3;
+	wordOfTheDay = allWords[3];
 }
 
 let guessedWordCount = 0;
@@ -56,11 +56,9 @@ for (let i = 0; i < keys.length; i++) {
 
 // incorporating peter's suggestions
 // Add event listener on keydown for keyboard entry
-document.addEventListener('keyup', (event) => {
+document.addEventListener('keydown', (event) => {
 	var code = event.code;
-	var letter = event.key;
-	// console.log(event.code);
-	// console.log(event.key);
+	var key = event.key;
 	if (code == "Enter") {
 		handleSubmitWord()
 		return;
@@ -71,12 +69,30 @@ document.addEventListener('keyup', (event) => {
 		return;
 	}
 
-	if (letter >= 'a' && letter <= 'z'
-		|| letter >= 'A' && letter <= 'Z') {
-		// console.log("é uma letra válida");
-		updateGuessedWords(letter);
+	if (isLetter(key)) {
+		updateGuessedWords(key);
 	}
 }, false);
+
+function isLetter(key) {
+	if (key == 'a' || key == 'b' || key == 'c' || key == 'd' || key == 'e'
+	|| key == 'f' || key == 'g' || key == 'h' || key == 'i' || key == 'j'
+	|| key == 'k' || key == 'l' || key == 'm' || key == 'n' || key == 'o'
+	|| key == 'p' || key == 'q' || key == 'r' || key == 's' || key == 't'
+	|| key == 'u' || key == 'v' || key == 'w' || key == 'x' || key == 'y'
+	|| key == 'z'
+	|| key == 'A' || key == 'B' || key == 'C' || key == 'D' || key == 'E'
+	|| key == 'F' || key == 'G' || key == 'H' || key == 'I' || key == 'J'
+	|| key == 'K' || key == 'L' || key == 'M' || key == 'N' || key == 'O'
+	|| key == 'P' || key == 'Q' || key == 'R' || key == 'S' || key == 'T'
+	|| key == 'U' || key == 'V' || key == 'W' || key == 'X' || key == 'Y'
+	|| key == 'Z') {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
 function handleSubmitWord() {
 	const currentWordArr = getCurrentWordArr()
@@ -87,44 +103,46 @@ function handleSubmitWord() {
 
 	const currentWord = currentWordArr.join('')
 
-	const firstLetterId = guessedWordCount * 5 + 1;
-	const interval = 200;
-	currentWordArr.forEach((letter, index) => {
-		setTimeout(() => {
-			const tileColor = getTileColor(letter, index, selectedWordIndex);
-
-			const letterId = firstLetterId + index;
-			const letterEl = document.getElementById(letterId)
-			letterEl.classList.add("animate__flipInX");
-			letterEl.style = `background-color:${tileColor};border-color:${tileColor}`;
-		}, interval * index);
+	fetch(
+		`https://api.dictionaryapi.dev/api/v2/entries/en/${currentWord}`,
+		{
+			method: "GET"
+		}
+	).then((res) => {
+		if (!res.ok) {
+			throw Error()
+		}
+		const firstLetterId = guessedWordCount * 5 + 1;
+		const interval = 200;
+		currentWordArr.forEach((letter, index) => {
+			setTimeout(() => {
+				const tileColor = getTileColor(letter, index, wordOfTheDay);
+	
+				const letterId = firstLetterId + index;
+				const letterEl = document.getElementById(letterId)
+				letterEl.classList.add("animate__flipInX");
+				letterEl.style = `background-color:${tileColor};border-color:${tileColor}`;
+			}, interval * index);
+		})
+	
+		guessedWordCount += 1;
+	
+		if (guessIsCorrect(currentWord)) {
+			setTimeout(() => {
+				window.alert("Congratulations!");
+			}, interval * 6);
+		} 
+		else if (guessedWords.length > 5) {
+			setTimeout(() => {
+				window.alert(`Sorry, you have no more guesses. The word is ${wordOfTheDay}.`)
+			}, interval * 6);
+		}
+	
+		guessedWords.push([]);
+	}).catch(() => {
+		window.alert("Word is not recognised");
 	})
 
-	guessedWordCount += 1;
-
-	if (currentWord === pamonha[0] && (today_day >= 1 && today_day <= 10)) {
-
-		window.alert("Congratulations!");
-
-	} else if (currentWord === pamonha[1] && (today_day >= (13 - 2) && today_day <= (16 + 1))) {
-
-		window.alert("Congratulations!");
-
-	} else if (currentWord === pamonha[2] && (today_day >= 18 && today_day <= 24)) {
-
-		window.alert("Congratulations!");
-
-	} else if (currentWord === pamonha[3] && (today_day >= 25 && today_day <= 31)) {
-
-		window.alert("Congratulations!");
-
-	}
-
-	if (guessedWords.length === 6) {
-		window.alert("Sorry, you have no more guesses. /** The word is ${word}. **/")
-	}
-
-	guessedWords.push([]);
 }
 
 function handleDeleteLetter() {
@@ -157,14 +175,14 @@ function updateGuessedWords(letter) {
 	}
 }
 
-function getTileColor(letter, index, selectedWordIndex) {
-	const isCorrectLetter = pamonha[selectedWordIndex].includes(letter)
+function getTileColor(letter, index, word) {
+	const isCorrectLetter = word.includes(letter)
 
 	if (!isCorrectLetter) {
 		return "rgba(171, 192, 196, 1)";
 	}
 
-	const letterInThatPosition = pamonha[selectedWordIndex].charAt(index)
+	const letterInThatPosition = word.charAt(index)
 	const isCorrectPosition = letter === letterInThatPosition
 
 	if (isCorrectPosition) {
@@ -185,4 +203,14 @@ function createSquares() {
 		square.setAttribute("id", index + 1);
 		gameBoard.appendChild(square);
 	}
+}
+
+function guessIsCorrect(currentWord) {
+	if ((currentWord === allWords[0] && (today_day >= 1 && today_day <= 10))
+		|| (currentWord === allWords[1] && (today_day >= (13 - 2) && today_day <= (16 + 1)))
+		|| (currentWord === allWords[2] && (today_day >= 18 && today_day <= 24))
+		|| (currentWord === allWords[3] && (today_day >= 25 && today_day <= 31)))
+		return true;
+	else
+		return false;
 }
