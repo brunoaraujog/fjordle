@@ -99,6 +99,7 @@ function handleSubmitWord() {
 
 	if (currentWordArr.length !== 5) {
 		window.alert("Word must be 5 letters");
+		return ;
 	}
 
 	const currentWord = currentWordArr.join('')
