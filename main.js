@@ -2,6 +2,7 @@ createSquares();
 
 let guessedWords = [[]];
 let availableSpace = 1;
+console.log("Init: availableSpace: " + availableSpace);
 
 //let word = "fjord";
 const allWords = ["brisk", "zesty", "fiery", "fjord"];
@@ -29,6 +30,7 @@ if (today_day >= 1 && today_day <= 10) {
 }
 
 let guessedWordCount = 0;
+let newLine = true;
 
 const keys = document.querySelectorAll(".keyboard-row button");
 
@@ -99,6 +101,7 @@ function handleSubmitWord() {
 
 	if (currentWordArr.length !== 5) {
 		window.alert("Word must be 5 letters");
+		return ;
 	}
 
 	const currentWord = currentWordArr.join('')
@@ -124,17 +127,20 @@ function handleSubmitWord() {
 				letterEl.style = `background-color:${tileColor};border-color:${tileColor}`;
 			}, interval * index);
 		})
+		newLine = true;
 	
 		guessedWordCount += 1;
 	
 		if (guessIsCorrect(currentWord)) {
 			setTimeout(() => {
 				window.alert("Congratulations!");
+				clearBoard();
 			}, interval * 6);
 		} 
 		else if (guessedWords.length > 5) {
 			setTimeout(() => {
 				window.alert(`Sorry, you have no more guesses. The word is ${wordOfTheDay}.`)
+				clearBoard();
 			}, interval * 6);
 		}
 	
@@ -151,10 +157,17 @@ function handleDeleteLetter() {
 
 	guessedWords[guessedWords.length - 1] = currentWordArr
 
-	const lastLetterEl = document.getElementById(String(availableSpace - 1))
-
-	lastLetterEl.textContent = ''
-	availableSpace = availableSpace - 1
+	// availableSpace begins in 1
+	if ((availableSpace - 1) % 5 == 0 && newLine == true)
+	{
+		return;
+	}
+	const lastLetterEl = document.getElementById(String(availableSpace - 1));
+	lastLetterEl.textContent = '';
+	availableSpace = availableSpace - 1;
+	if ((availableSpace - 1) % 5 == 0)
+		newLine = true;
+	console.log("handleDeleteLetter: availableSpace: " + availableSpace);
 }
 
 function getCurrentWordArr() {
@@ -170,6 +183,15 @@ function updateGuessedWords(letter) {
 
 		const availableSpaceEl = document.getElementById(String(availableSpace));
 		availableSpace = availableSpace + 1;
+		if ((availableSpace - 1) % 5 == 4)
+			newLine = false;
+		else if ((availableSpace - 1) % 5 == 0 && newLine == false)
+			newLine = false;
+		else if ((availableSpace - 1) % 5 == 0)
+			newLine = true;
+		console.log("UpdateGuessedWords: availableSpace + 1: " + availableSpace);
+		console.log("UpdateGuessedWords: newLine: " + newLine);
+
 
 		availableSpaceEl.textContent = letter;
 	}
@@ -214,3 +236,16 @@ function guessIsCorrect(currentWord) {
 	else
 		return false;
 }
+
+function clearBoard() {
+    for (let i = 0; i < 30; i++) {
+      let square = document.getElementById(i + 1);
+      square.textContent = "";
+    }
+
+    const keys = document.getElementsByClassName("keyboard-button");
+
+    for (var key of keys) {
+      key.disabled = true;
+    }
+  }
