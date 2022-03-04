@@ -238,14 +238,14 @@ function guessIsCorrect(currentWord) {
 }
 
 function clearBoard() {
-    for (let i = 0; i < 30; i++) {
-      let square = document.getElementById(i + 1);
-      square.textContent = "";
-    }
+	for (let i = 0; i < 30; i++) {
+		let square = document.getElementById(i + 1);
+		square.textContent = "";
+	}
 
-    const keys = document.getElementsByClassName("keyboard-button");
+	const keys = document.querySelectorAll("button[data-key]");
 
-    for (var key of keys) {
-      key.disabled = true;
-    }
+	for (const key of keys) {
+		key.disabled = true;
+	}
   }
