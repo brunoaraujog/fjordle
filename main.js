@@ -202,12 +202,21 @@ function getTileColor(letter, index, word) {
 function createSquares() {
 	const gameBoard = document.getElementById("board");
 
-	for (let index = 0; index < 30; index++) {
-		let square = document.createElement("div");
-		square.classList.add("square");
-		square.classList.add("animate__animated");
-		square.setAttribute("id", index + 1);
-		gameBoard.appendChild(square);
+	let columns = 5;
+	let rows = 6;
+
+	for (let i = 0; i < rows; i++) {
+		const row = document.createElement("div");
+		row.classList.add("row");
+
+		for (let j = 0; j < columns; j++) {
+			const square = document.createElement("div");
+			square.classList.add("square", "animate__animated");
+			square.id = (j + 1) + (i * columns);
+			row.appendChild(square);
+		}
+		
+		gameBoard.appendChild(row);
 	}
 }
 
