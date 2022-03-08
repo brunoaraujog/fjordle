@@ -9,7 +9,7 @@ const allWords = ["brisk", "zesty", "fiery", "fjord"];
 
 let today;
 today = new Date();
-let today_day = today.getDay();
+let today_day = today.getDate();
 let wordOfTheDay;
 
 if (today_day >= 1 && today_day <= 10) {
