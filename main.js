@@ -9,7 +9,7 @@ const allWords = ["brisk", "zesty", "fiery", "fjord"];
 
 let today;
 today = new Date();
-let today_day = today.getDay();
+let today_day = today.getDate();
 let wordOfTheDay;
 
 if (today_day >= 1 && today_day <= 10) {
@@ -58,15 +58,15 @@ for (let i = 0; i < keys.length; i++) {
 
 // incorporating peter's suggestions
 // Add event listener on keydown for keyboard entry
-document.addEventListener('keydown', (event) => {
-	var code = event.code;
-	var key = event.key;
-	if (code == "Enter") {
+document.addEventListener('keydown', handleKeyDown);
+
+function handleKeyDown({ code, key }) {
+	if (code === "Enter") {
 		handleSubmitWord()
 		return;
 	}
 
-	if (code == "Backspace" || code == "Delete") {
+	if (code === "Backspace" || code === "Delete") {
 		handleDeleteLetter()
 		return;
 	}
@@ -74,26 +74,10 @@ document.addEventListener('keydown', (event) => {
 	if (isLetter(key)) {
 		updateGuessedWords(key);
 	}
-}, false);
+}
 
 function isLetter(key) {
-	if (key == 'a' || key == 'b' || key == 'c' || key == 'd' || key == 'e'
-	|| key == 'f' || key == 'g' || key == 'h' || key == 'i' || key == 'j'
-	|| key == 'k' || key == 'l' || key == 'm' || key == 'n' || key == 'o'
-	|| key == 'p' || key == 'q' || key == 'r' || key == 's' || key == 't'
-	|| key == 'u' || key == 'v' || key == 'w' || key == 'x' || key == 'y'
-	|| key == 'z'
-	|| key == 'A' || key == 'B' || key == 'C' || key == 'D' || key == 'E'
-	|| key == 'F' || key == 'G' || key == 'H' || key == 'I' || key == 'J'
-	|| key == 'K' || key == 'L' || key == 'M' || key == 'N' || key == 'O'
-	|| key == 'P' || key == 'Q' || key == 'R' || key == 'S' || key == 'T'
-	|| key == 'U' || key == 'V' || key == 'W' || key == 'X' || key == 'Y'
-	|| key == 'Z') {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return /^[a-z]$/i.test(key);
 }
 
 function handleSubmitWord() {
@@ -218,34 +202,39 @@ function getTileColor(letter, index, word) {
 function createSquares() {
 	const gameBoard = document.getElementById("board");
 
-	for (let index = 0; index < 30; index++) {
-		let square = document.createElement("div");
-		square.classList.add("square");
-		square.classList.add("animate__animated");
-		square.setAttribute("id", index + 1);
-		gameBoard.appendChild(square);
+	let columns = 5;
+	let rows = 6;
+
+	for (let i = 0; i < rows; i++) {
+		const row = document.createElement("div");
+		row.classList.add("row");
+
+		for (let j = 0; j < columns; j++) {
+			const square = document.createElement("div");
+			square.classList.add("square", "animate__animated");
+			square.id = (j + 1) + (i * columns);
+			row.appendChild(square);
+		}
+		
+		gameBoard.appendChild(row);
 	}
 }
 
 function guessIsCorrect(currentWord) {
-	if ((currentWord === allWords[0] && (today_day >= 1 && today_day <= 10))
-		|| (currentWord === allWords[1] && (today_day >= (13 - 2) && today_day <= (16 + 1)))
-		|| (currentWord === allWords[2] && (today_day >= 18 && today_day <= 24))
-		|| (currentWord === allWords[3] && (today_day >= 25 && today_day <= 31)))
-		return true;
-	else
-		return false;
+	return currentWord === wordOfTheDay
 }
 
 function clearBoard() {
-    for (let i = 0; i < 30; i++) {
-      let square = document.getElementById(i + 1);
-      square.textContent = "";
-    }
+	for (let i = 0; i < 30; i++) {
+		let square = document.getElementById(i + 1);
+		square.textContent = "";
+	}
 
-    const keys = document.getElementsByClassName("keyboard-button");
+	const keys = document.querySelectorAll("button[data-key]");
 
-    for (var key of keys) {
-      key.disabled = true;
-    }
-  }
+	for (const key of keys) {
+		key.disabled = true;
+	}
+
+	document.removeEventListener('keydown', handleKeyDown);
+}
