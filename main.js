@@ -5,7 +5,7 @@ let availableSpace = 1;
 console.log("Init: availableSpace: " + availableSpace);
 
 //let word = "fjord";
-const allWords = ["brisk", "zesty", "fiery", "fjord"];
+const allWords = ["brisk", "gutsy", "fiery", "fjord"];
 
 let today;
 today = new Date();
@@ -117,13 +117,17 @@ function handleSubmitWord() {
 	
 		if (guessIsCorrect(currentWord)) {
 			setTimeout(() => {
-				window.alert("Congratulations!");
+				window.alert(`You guessed it!
+
+The letters will be cleared from the board, take a spoiler-free screenshot and send it for others to give Fjordle a try ;-)`);
 				clearBoard();
 			}, interval * 6);
 		} 
 		else if (guessedWords.length > 5) {
 			setTimeout(() => {
-				window.alert(`Sorry, you have no more guesses. The word is ${wordOfTheDay}.`)
+				window.alert(`Sorry, you have no more guesses. The word is ${wordOfTheDay}. 
+
+The letters will be cleared from the board, take a spoiler-free screenshot and send it for others to give Fjordle a try ;-)`)
 				clearBoard();
 			}, interval * 6);
 		}
